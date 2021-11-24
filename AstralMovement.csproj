@@ -36,7 +36,11 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AstralCore">
+    <Reference Include="Assembly-CSharp">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\VRChat\MelonLoader\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="AstralCore, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\VRChat\Mods\AstralCore.dll</HintPath>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
@@ -71,8 +75,11 @@
     <Compile Include="AstralMovement.cs" />
     <Compile Include="Flight.cs" />
     <Compile Include="HighStep.cs" />
+    <Compile Include="Jumping.cs" />
     <Compile Include="Preferences.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

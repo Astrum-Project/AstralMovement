@@ -15,6 +15,7 @@ namespace Astrum
 
             category.CreateEntry("highStep", false, "High Step");
             category.CreateEntry("highStepHeight", 2.0f, "High Step Height");
+            category.CreateEntry("infJump", false, "Infinite Jump");
 
             OnPreferencesLoaded();
         }
@@ -26,6 +27,7 @@ namespace Astrum
 
             HighStep.Enabled = category.GetEntry<bool>("highStep").Value;
             HighStep.Height = category.GetEntry<float>("highStepHeight").Value;
+            Jumping.State = category.GetEntry<bool>("infJump").Value;
         }
     }
 }
