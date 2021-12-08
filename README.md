@@ -2,8 +2,9 @@
 
 # Features:
 - High Step
-- Flight
+- Infinite Jump
+- Flight (+NoClip)
 
 # Usage:
-- High Step is configured via MelonPrefs
-- Flight is configured via [AstralCore](https://github.com/Astrum-Project/AstralCore/)
+- Configure via MelonPrefs or a Core adapter
+- Flight requires [AstralCore](https://github.com/Astrum-Project/AstralCore/)
