@@ -21,7 +21,7 @@ namespace Astrum
                 set {
                     enabled = value;
                     if (value)
-                        Set(null);
+                        Set(height);
                     else Set(0.5f);
                 }
             }
@@ -33,7 +33,7 @@ namespace Astrum
                 set {
                     height = value;
                     if (enabled) 
-                        Set(null);
+                        Set(value);
                 }
             }
 
@@ -57,14 +57,12 @@ namespace Astrum
                 }
             }
 
-            public static void Set(float? theight)
+            public static void Set(float height)
             {
                 if (Networking.LocalPlayer?.gameObject is null) return;
 
-                float nheight = theight ?? height;
-
                 object inputController = m_GetComponent.Invoke(Networking.LocalPlayer.gameObject, new object[0] { });
-                m_maxStepHeight.SetValue(inputController, nheight);
+                m_maxStepHeight.SetValue(inputController, height);
             }
         }
     }

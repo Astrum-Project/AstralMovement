@@ -1,33 +1,47 @@
 ﻿using MelonLoader;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Astrum
 {
     partial class AstralMovement
     {
-        public void RegisterPrefs()
+        public static class Prefs
         {
-            MelonPreferences_Category category = MelonPreferences.CreateCategory("Astrum-AstralMovement", "Astral Movement");
+            public static MelonPreferences_Entry<bool> highStep;
+            public static MelonPreferences_Entry<float> highStepHeight;
 
-            category.CreateEntry("highStep", false, "High Step");
-            category.CreateEntry("highStepHeight", 2.0f, "High Step Height");
-            category.CreateEntry("infJump", false, "Infinite Jump");
+            public static MelonPreferences_Entry<bool> infJump;
 
-            OnPreferencesLoaded();
+            public static MelonPreferences_Entry<float> flightSpeed;
+            public static MelonPreferences_Entry<bool> flightNoClip;
+
+            public static void Initalize()
+            {
+                MelonPreferences_Category category = MelonPreferences.CreateCategory("Astrum-AstralMovement", "Astral Movement");
+
+                category.Create(ref highStep, nameof(highStep), "High Step", false, (_, value) => HighStep.Enabled = value);
+                category.Create(ref highStepHeight, nameof(highStepHeight), "High Step Height", 2.0f, (_, value) => HighStep.Height = value);
+
+                category.Create(ref infJump, nameof(infJump), "Infinite Jump", false, (_, value) => Jumping.State = value);
+
+                // there seems to be no way to make a MelonPref unsaved
+                // as a result, im keeping flight core only
+                if (hasCore)
+                {
+                    category.Create(ref flightSpeed, nameof(flightSpeed), "Flight Speed", 8.0f, (_, value) => Flight.speed = value);
+                    category.Create(ref flightNoClip, nameof(flightNoClip), "Flight No Clip", false, (_, value) => Flight.NoClip = value);
+                }
+            }
         }
+    }
 
-        public override void OnPreferencesSaved() => OnPreferencesLoaded();
-        public override void OnPreferencesLoaded()
+    internal static class Extensions
+    {
+        internal static void Create<T>(this MelonPreferences_Category category, ref MelonPreferences_Entry<T> entry, string id, string name, T def, Action<T, T> OnValueChanged)
         {
-            MelonPreferences_Category category = MelonPreferences.GetCategory("Astrum-AstralMovement");
-
-            HighStep.Enabled = category.GetEntry<bool>("highStep").Value;
-            HighStep.Height = category.GetEntry<float>("highStepHeight").Value;
-            Jumping.State = category.GetEntry<bool>("infJump").Value;
+            (entry = category.CreateEntry(id, def, name)).OnValueChanged += OnValueChanged;
+            if (!def.Equals(entry.Value)) // since ML can't do it on its own
+                OnValueChanged(def, entry.Value);
         }
     }
 }

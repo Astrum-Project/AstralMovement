@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using VRC.SDKBase;
 
@@ -24,18 +23,27 @@ namespace Astrum
                     else Disable();
                 }
             }
+
+            private static Collider collider;
+            private static bool noClip;
+            public static bool NoClip
+            {
+                get => noClip;
+                set
+                {
+                    if (collider == null)
+                    {
+                        if (Networking.LocalPlayer?.gameObject == null) return;
+
+                        collider = Networking.LocalPlayer.gameObject.GetComponent<Collider>();
+                    }
+
+                    collider.enabled = !(noClip = value);
+                }
+            }
             
             private static bool stored = false;
             private static Vector3 oGrav = new Vector3(0, -9.8f, 0);
-
-            public static void Toggle(bool? tstate)
-            {
-                bool nstate = tstate ?? !state;
-
-                if (nstate == state) return;
-
-                State = nstate;
-            }
 
             public static void Enable()
             {
