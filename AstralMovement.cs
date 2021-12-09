@@ -21,16 +21,18 @@ namespace Astrum
 
             HighStep.Initialize();
             Prefs.Initalize();
-
             if (hasCore)
+            {
+                Serialize.Initialize();
                 Extern.SetupCommands();
+            }
             else MelonLogger.Warning("AstralCore is missing, running at reduced functionality");
         }
 
         public override void OnSceneWasLoaded(int index, string _)
         {
             if (index != -1) return;
-
+            Prefs.serialize.Value = false;
             MelonCoroutines.Start(WaitForLocalLoad());
         }
 
@@ -59,6 +61,8 @@ namespace Astrum
                 module.Register(new CommandManager.ConVar<bool>(new Action<bool>(state => Flight.State = state)), "Flight");
                 module.Register(new CommandManager.ConVar<float>(new Action<float>(value => Prefs.flightSpeed.Value = value)), "Flight.Speed");
                 module.Register(new CommandManager.ConVar<bool>(new Action<bool>(state => Prefs.flightNoClip.Value = state)), "Flight.NoClip");
+
+                module.Register(new CommandManager.ConVar<bool>(new Action<bool>(state => Prefs.serialize.Value = state)), "Serialize");
             }
         }
     }
