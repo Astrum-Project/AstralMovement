@@ -10,21 +10,20 @@ namespace Astrum
     {
         public static class Serialize
         {
-            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-            private delegate IntPtr OpRaiseEventSetupDelegate(IntPtr instance, byte __0, IntPtr __1, IntPtr __2, IntPtr __3, IntPtr nativeMethodInfoPtr);
-            private static OpRaiseEventSetupDelegate opRaiseEventSetupDelegate;
-            public static Il2CppSystem.Object cache { get; set; }
-            private static bool enabled = false;
-            public static bool Enabled 
+            private static bool state = false;
+            public static bool State 
             {
-                get => enabled; 
+                get => state; 
                 set 
                 {
-                    if (enabled == value) return;
-                    enabled = value;
+                    if (state == value) return;
+                    state = value;
                     cache = null;
                 }
             }
+
+            public static Il2CppSystem.Object cache { get; set; }
+
             public static unsafe void Initialize()
             {
                 try
@@ -33,13 +32,14 @@ namespace Astrum
                     MelonUtils.NativeHookAttach((IntPtr)(&originalMethod), typeof(Serialize).GetMethod(nameof(OpRaiseEventDetour), BindingFlags.Static | BindingFlags.NonPublic)!.MethodHandle.GetFunctionPointer());
                     opRaiseEventSetupDelegate = Marshal.GetDelegateForFunctionPointer<OpRaiseEventSetupDelegate>(originalMethod);
                 }
-                catch(Exception e) { MelonLogger.Warning($"OpRaiseEvent Hook Failed!\n{e}"); }
+                catch(Exception e) { Logger.Warn($"Failed to hook OpRaiseEvent:\n{e}"); }
             }
+
             private static IntPtr OpRaiseEventDetour(IntPtr instance, byte __0, IntPtr __1, IntPtr __2, IntPtr __3, IntPtr nativeMethodInfoPtr)
             {
                 try
                 {
-                    if (Enabled && __0 == 7)
+                    if (state && __0 == 7)
                     {
                         Il2CppSystem.Object obj = UnhollowerSupport.Il2CppObjectPtrToIl2CppObject<Il2CppSystem.Object>(__1);
                         if (cache == null)
@@ -48,9 +48,13 @@ namespace Astrum
                         else return opRaiseEventSetupDelegate(instance, __0, cache.Pointer, __2, __3, nativeMethodInfoPtr);
                     }
                 }
-                catch(Exception e) { MelonLogger.Error($"OpRaiseEvent Error!\n{e}"); }
+                catch(Exception e) { Logger.Error($"An exception has occurred in hook OpRaiseEvent:\n{e}"); }
                 return opRaiseEventSetupDelegate(instance, __0, __1, __2, __3, nativeMethodInfoPtr);
             }
+
+            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+            private delegate IntPtr OpRaiseEventSetupDelegate(IntPtr instance, byte __0, IntPtr __1, IntPtr __2, IntPtr __3, IntPtr nativeMethodInfoPtr);
+            private static OpRaiseEventSetupDelegate opRaiseEventSetupDelegate;
         }
     }
 }

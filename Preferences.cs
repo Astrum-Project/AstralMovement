@@ -14,7 +14,6 @@ namespace Astrum
 
             public static MelonPreferences_Entry<float> flightSpeed;
             public static MelonPreferences_Entry<bool> flightNoClip;
-            public static MelonPreferences_Entry<bool> serialize;
 
             public static void Initalize()
             {
@@ -31,7 +30,6 @@ namespace Astrum
                 {
                     category.Create(ref flightSpeed, nameof(flightSpeed), "Flight Speed", 8.0f, (_, value) => Flight.speed = value);
                     category.Create(ref flightNoClip, nameof(flightNoClip), "Flight No Clip", false, (_, value) => Flight.NoClip = value);
-                    category.Create(ref serialize, nameof(serialize), "Serialize", false, (_, value) => Serialize.Enabled = value);
                 }
             }
         }

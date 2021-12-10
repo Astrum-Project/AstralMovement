@@ -1,4 +1,6 @@
-﻿using MelonLoader;
+﻿#pragma warning disable CS0618 // Type or member is obsolete
+
+using MelonLoader;
 using System;
 using System.Linq;
 using System.Reflection;
