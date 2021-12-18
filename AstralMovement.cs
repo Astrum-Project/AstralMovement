@@ -1,11 +1,11 @@
 ﻿global using Astrum.AstralCore;
-using Astrum.AstralCore.Managers;
+global using Astrum.AstralCore.UI.Attributes;
 using MelonLoader;
 using System;
 using System.Linq;
 using VRC.SDKBase;
 
-[assembly: MelonInfo(typeof(Astrum.AstralMovement), nameof(Astrum.AstralMovement), "0.4.0", downloadLink: "github.com/Astrum-Project/" + nameof(Astrum.AstralMovement))]
+[assembly: MelonInfo(typeof(Astrum.AstralMovement), nameof(Astrum.AstralMovement), "0.5.0", downloadLink: "github.com/Astrum-Project/" + nameof(Astrum.AstralMovement))]
 [assembly: MelonGame("VRChat", "VRChat")]
 [assembly: MelonColor(ConsoleColor.DarkMagenta)]
 [assembly: MelonOptionalDependencies("AstralCore")]
@@ -14,19 +14,11 @@ namespace Astrum
 {
     public partial class AstralMovement : MelonMod
     {
-        public static bool hasCore = false;
-
         public override void OnApplicationStart()
         {
-            hasCore = AppDomain.CurrentDomain.GetAssemblies().Any(x => x.GetName().Name == "AstralCore");
-
             HighStep.Initialize();
-            Prefs.Initalize();
-            if (hasCore)
-            {
+            if (AppDomain.CurrentDomain.GetAssemblies().Any(x => x.GetName().Name == "AstralCore"))
                 Serialize.Initialize();
-                Extern.SetupCommands();
-            }
             else LoggerInstance.Warning("AstralCore is missing, running at reduced functionality");
         }
 
@@ -54,24 +46,5 @@ namespace Astrum
 
         internal static Action Update = new(() => { });
         public override void OnUpdate() => Update();
-
-        internal static class Extern
-        {
-            public static void SetupCommands()
-            {
-                ModuleManager.Module module = new("Movement");
-
-                module.Register(new CommandManager.ConVar<bool>(new Action<bool>(state => Prefs.highStep.Value = state), false), "HighStep");
-                module.Register(new CommandManager.ConVar<float>(new Action<float>(value => Prefs.highStepHeight.Value = value)), "HighStep.Height");
-
-                module.Register(new CommandManager.ConVar<bool>(new Action<bool>(state => Prefs.infJump.Value = state)), "Infinite Jump");
-
-                module.Register(new CommandManager.ConVar<bool>(new Action<bool>(state => Flight.State = state)), "Flight");
-                module.Register(new CommandManager.ConVar<float>(new Action<float>(value => Prefs.flightSpeed.Value = value)), "Flight.Speed");
-                module.Register(new CommandManager.ConVar<bool>(new Action<bool>(state => Prefs.flightNoClip.Value = state)), "Flight.NoClip");
-
-                module.Register(new CommandManager.ConVar<bool>(new Action<bool>(state => Serialize.State = state)), "Serialize");
-            }
-        }
     }
 }

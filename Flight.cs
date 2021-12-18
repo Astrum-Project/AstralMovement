@@ -8,9 +8,11 @@ namespace Astrum
     {
         public static class Flight
         {
+            [UIField<bool>("Movement", "Flight.Speed")]
             public static float speed = 8f;
 
             private static bool state;
+            [UIProperty<bool>("Movement", "Flight")]
             public static bool State
             {
                 get => state;
@@ -25,7 +27,9 @@ namespace Astrum
             }
 
             private static Collider collider;
+
             private static bool noClip;
+            [UIProperty<bool>("Movement", "NoClip")]
             public static bool NoClip
             {
                 get => noClip;
@@ -43,7 +47,7 @@ namespace Astrum
             }
             
             private static bool stored = false;
-            private static Vector3 oGrav = new Vector3(0, -9.8f, 0);
+            private static Vector3 oGrav = new(0, -9.8f, 0);
 
             public static void Enable()
             {

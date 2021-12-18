@@ -17,6 +17,7 @@ namespace Astrum
             public static MethodInfo m_GetComponent;
 
             private static bool enabled = false;
+            [UIProperty<bool>("Movement", "HighStep")]
             public static bool Enabled
             {
                 get => enabled;
@@ -29,6 +30,7 @@ namespace Astrum
             }
 
             private static float height = 0;
+            [UIProperty<bool>("Movement", "HighStep.Height")]
             public static float Height
             {
                 get => height;

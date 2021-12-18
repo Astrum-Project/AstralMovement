@@ -8,6 +8,7 @@ namespace Astrum
         public static class Jumping 
         {
             private static bool state;
+            [UIProperty<bool>("Movement", "Jumping")]
             public static bool State
             {
                 get => state;
@@ -38,7 +39,7 @@ namespace Astrum
                 }
             }
 
-            private static VRCMotionState FetchMotion() =>VRC.SDKBase.Networking.LocalPlayer.gameObject.GetComponent<VRCMotionState>();
+            private static VRCMotionState FetchMotion() => VRC.SDKBase.Networking.LocalPlayer.gameObject.GetComponent<VRCMotionState>();
         }
     }
 }

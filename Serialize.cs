@@ -11,6 +11,7 @@ namespace Astrum
         public static class Serialize
         {
             private static bool state = false;
+            [UIProperty<bool>("Movement", "Serialize")]
             public static bool State 
             {
                 get => state; 
