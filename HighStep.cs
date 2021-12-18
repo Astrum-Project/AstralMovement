@@ -30,7 +30,7 @@ namespace Astrum
             }
 
             private static float height = 0;
-            [UIProperty<bool>("Movement", "HighStep.Height")]
+            [UIProperty<float>("Movement", "HighStep.Height")]
             public static float Height
             {
                 get => height;

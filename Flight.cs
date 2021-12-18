@@ -8,7 +8,7 @@ namespace Astrum
     {
         public static class Flight
         {
-            [UIField<bool>("Movement", "Flight.Speed")]
+            [UIField<float>("Movement", "Flight.Speed")]
             public static float speed = 8f;
 
             private static bool state;

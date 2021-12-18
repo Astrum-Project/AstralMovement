@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using VRC.SDKBase;
 
-[assembly: MelonInfo(typeof(Astrum.AstralMovement), nameof(Astrum.AstralMovement), "0.5.0", downloadLink: "github.com/Astrum-Project/" + nameof(Astrum.AstralMovement))]
+[assembly: MelonInfo(typeof(Astrum.AstralMovement), nameof(Astrum.AstralMovement), "0.5.1", downloadLink: "github.com/Astrum-Project/" + nameof(Astrum.AstralMovement))]
 [assembly: MelonGame("VRChat", "VRChat")]
 [assembly: MelonColor(ConsoleColor.DarkMagenta)]
 [assembly: MelonOptionalDependencies("AstralCore")]
