@@ -5,20 +5,25 @@ using System;
 using System.Linq;
 using VRC.SDKBase;
 
-[assembly: MelonInfo(typeof(Astrum.AstralMovement), nameof(Astrum.AstralMovement), "0.5.1", downloadLink: "github.com/Astrum-Project/" + nameof(Astrum.AstralMovement))]
+[assembly: MelonInfo(typeof(Astrum.AstralMovement), nameof(Astrum.AstralMovement), "0.5.2", downloadLink: "github.com/Astrum-Project/" + nameof(Astrum.AstralMovement))]
 [assembly: MelonGame("VRChat", "VRChat")]
 [assembly: MelonColor(ConsoleColor.DarkMagenta)]
-[assembly: MelonOptionalDependencies("AstralCore")]
+[assembly: MelonOptionalDependencies("AstralCore", "ActionMenuApi")]
 
 namespace Astrum
 {
     public partial class AstralMovement : MelonMod
     {
+        private static bool hasCore;
+
         public override void OnApplicationStart()
         {
             HighStep.Initialize();
-            if (AppDomain.CurrentDomain.GetAssemblies().Any(x => x.GetName().Name == "AstralCore"))
+            if (hasCore = AppDomain.CurrentDomain.GetAssemblies().Any(x => x.GetName().Name == "AstralCore"))
                 Serialize.Initialize();
+            if (AppDomain.CurrentDomain.GetAssemblies().Any(x => x.GetName().Name == "ActionMenuApi"))
+                Extern.InitializeActionMenu();
+
             else LoggerInstance.Warning("AstralCore is missing, running at reduced functionality");
         }
 
@@ -46,5 +51,18 @@ namespace Astrum
 
         internal static Action Update = new(() => { });
         public override void OnUpdate() => Update();
+
+        internal class Extern
+        {
+            public static void InitializeActionMenu()
+            {
+                ActionMenuApi.Api.VRCActionMenuPage.AddSubMenu(ActionMenuApi.Api.ActionMenuPage.Main, "Movement", () =>
+                {
+                    ActionMenuApi.Api.CustomSubMenu.AddToggle("Flight", Flight.State, state => Flight.State = state);
+                    ActionMenuApi.Api.CustomSubMenu.AddToggle("Noclip", Flight.NoClip, state => Flight.NoClip = state);
+                    ActionMenuApi.Api.CustomSubMenu.AddToggle("Serialize", Serialize.State, state => Serialize.State = state, null, !hasCore);
+                });
+            }
+        }
     }
 }
