@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS0618 // Type or member is obsolete
-
-using MelonLoader;
+﻿using MelonLoader;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -52,10 +50,10 @@ namespace Astrum
                     .FirstOrDefault(x => x.Name == "maxStepHeight");
 
                 if (m_maxStepHeight is null)
-                    MelonLogger.Warning("Failed to find LocomotionInputController");
+                    AstralCore.Logger.Warn("Failed to find LocomotionInputController");
                 else
                 {
-                    MelonLogger.Msg("LocomotionInputController is " + m_maxStepHeight.DeclaringType.Name);
+                    AstralCore.Logger.Info("LocomotionInputController is " + m_maxStepHeight.DeclaringType.Name);
 
                     m_GetComponent = typeof(GameObject).GetMethod(nameof(GameObject.GetComponent), new Type[0] { }).MakeGenericMethod(m_maxStepHeight.DeclaringType);
                 }
