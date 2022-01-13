@@ -51,14 +51,19 @@ namespace Astrum
         [UIButton("Movement", "Teleport")]
         public static void Teleport()
         {
-            VRCPlayerApi player;
             if (AstralCore.Managers.SelectionManager.SelectedPlayer is null)
-                player = Networking.LocalPlayer;
-            else player = VRCPlayerApi.AllPlayers.Find(
+            {
+                Logger.Notif("You have nobody selected.");
+                return;
+            }
+            
+            VRCPlayerApi player = VRCPlayerApi.AllPlayers.Find(
                 UnhollowerRuntimeLib.DelegateSupport.ConvertDelegate<Il2CppSystem.Predicate<VRCPlayerApi>>(
                     new Predicate<VRCPlayerApi>(x => x.displayName == AstralCore.Managers.SelectionManager.SelectedPlayer.displayName)
                 )
             );
+
+            Networking.LocalPlayer.gameObject.transform.position = player.gameObject.transform.position;
         }
 
         internal class Extern
